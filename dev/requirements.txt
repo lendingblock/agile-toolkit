@@ -1,0 +1,18 @@
+#
+# asyncio stack
+aiohttp
+#
+# tools
+click
+python-dotenv
+pyyaml
+#
+# required for python 3.6
+dataclasses
+#
+# testing and linting
+mypy
+pytest
+pytest-cov
+pytest-aiohttp
+flake8
