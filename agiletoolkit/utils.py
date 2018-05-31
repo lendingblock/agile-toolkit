@@ -7,27 +7,13 @@ from contextlib import contextmanager
 
 import click
 
-from dotenv import load_dotenv, find_dotenv
-
-
-cd = os.path.dirname
-
 
 PR_RE = re.compile('pr-*')
 FORMAT = '%n'.join(['%H', '%aN', '%ae', '%cN', '%ce', '%s'])
-PLATFORM_DIR = cd(cd((os.path.abspath(__file__))))
 
 
 class CommandError(click.ClickException):
     pass
-
-
-def load_env():
-    load_dotenv(find_dotenv())
-
-
-def init(ctx):
-    load_env()
 
 
 def wait(awaitable):

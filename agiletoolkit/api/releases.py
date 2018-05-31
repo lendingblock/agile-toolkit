@@ -4,8 +4,6 @@ import mimetypes
 import logging
 from urllib.parse import urlsplit
 
-from pulsar.utils.httpurl import iri_to_uri
-
 from .components import RepoComponents, GithubException
 from ..utils import semantic_version
 
@@ -58,7 +56,7 @@ class Releases(RepoComponents):
         release = self.as_id(release)
         return self.get_list(url='%s/%s/assets' % (self, release))
 
-    async def upload(self, release, filename, content_type=None):
+    def upload(self, release, filename, content_type=None):
         """Upload a file to a release
 
         :param filename: filename to upload
@@ -75,23 +73,23 @@ class Releases(RepoComponents):
         url = '%s%s/%s/assets' % (self.uploads_url,
                                   urlsplit(self.api_url).path,
                                   release)
-        url = iri_to_uri(url, inputs)
         info = os.stat(filename)
         size = info[stat.ST_SIZE]
-        response = await self.http.post(
+        response = self.http.post(
             url, data=stream_upload(filename), auth=self.auth,
+            params=inputs,
             headers={'content-type': content_type,
                      'content-length': str(size)})
         response.raise_for_status()
         return response.json()
 
-    async def validate_tag(self, tag_name, prefix=None):
+    def validate_tag(self, tag_name, prefix=None):
         """Validate ``tag_name`` with the latest tag from github
 
         If ``tag_name`` is a valid candidate, return the latest tag from github
         """
         new_version = semantic_version(tag_name)
-        current = await self.latest()
+        current = self.latest()
         if current:
             tag_name = current['tag_name']
             if prefix:

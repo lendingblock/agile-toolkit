@@ -2,7 +2,7 @@ import os
 import logging
 import configparser
 
-from pulsar.apps.http import HttpClient
+import requests
 
 from .repo import GitRepo
 from .components import GithubException
@@ -14,7 +14,7 @@ LOGGER = logging.getLogger('github')
 class GithubApi:
 
     def __init__(self, auth=None, http=None):
-        self.http = http or HttpClient()
+        self.http = requests.Session()
         try:
             self.auth = auth or get_auth()
         except GithubException as exc:

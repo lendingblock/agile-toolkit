@@ -39,11 +39,12 @@ meta = dict(
     packages=find_packages(exclude=['tests', 'tests.*']),
     include_package_data=True,
     zip_safe=False,
-    install_requires=requirements('scripts/requirements.txt')[0],
-    entry_points="""
-    [console_scripts]
-    agile=agilelib.commands:start
-    """,
+    install_requires=requirements('dev/requirements.txt')[0],
+    entry_points={
+        "console_scripts": [
+            "agilekit=agiletoolkit.commands:start"
+        ]
+    },
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
@@ -53,6 +54,7 @@ meta = dict(
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'Topic :: Utilities'
     ]
 )

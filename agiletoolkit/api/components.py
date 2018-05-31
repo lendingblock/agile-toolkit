@@ -35,41 +35,42 @@ class RepoComponents(Component):
     def api_url(self):
         return '%s/%s' % (self.client, self.__class__.__name__.lower())
 
-    async def get(self, id):
+    def get(self, id):
         """Get data for this component
         """
         id = self.as_id(id)
         url = '%s/%s' % (self, id)
-        response = await self.http.get(url, auth=self.auth)
+        response = self.http.get(url, auth=self.auth)
         response.raise_for_status()
         return response.json()
 
-    async def create(self, data):
+    def create(self, data):
         """Create a new component
         """
-        response = await self.http.post(str(self), json=data, auth=self.auth)
+        response = self.http.post(str(self), json=data, auth=self.auth)
         response.raise_for_status()
         return response.json()
 
-    async def update(self, id, data):
+    def update(self, id, data):
         """Update a component
         """
         id = self.as_id(id)
-        response = await self.http.patch(
+        response = self.http.patch(
             '%s/%s' % (self, id), json=data, auth=self.auth
         )
         response.raise_for_status()
         return response.json()
 
-    async def delete(self, id):
+    def delete(self, id):
         """Delete a component by id
         """
         id = self.as_id(id)
-        response = await self.http.delete('%s/%s' % (self.api_url, id),
-                                          auth=self.auth)
+        response = self.http.delete(
+            '%s/%s' % (self.api_url, id),
+            auth=self.auth)
         response.raise_for_status()
 
-    async def get_list(self, url=None, callback=None, limit=100, **data):
+    def get_list(self, url=None, callback=None, limit=100, **data):
         """Get a list of this github component
         :param url: full url
         :param Comp: a :class:`.Component` class
@@ -84,7 +85,7 @@ class RepoComponents(Component):
         if limit:
             data['per_page'] = min(limit, 100)
         while url:
-            response = await self.http.get(url, params=data, auth=self.auth)
+            response = self.http.get(url, params=data, auth=self.auth)
             response.raise_for_status()
             result = response.json()
             n = m = len(result)

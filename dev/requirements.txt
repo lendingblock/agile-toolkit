@@ -1,14 +1,14 @@
 #
-# asyncio stack
-aiohttp
-#
 # tools
 click
 python-dotenv
 pyyaml
+requests
 #
 # required for python 3.6
 dataclasses
+# slack
+slackclient
 #
 # testing and linting
 mypy
