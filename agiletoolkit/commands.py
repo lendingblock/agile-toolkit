@@ -1,12 +1,13 @@
 import os
 import json
 
-import click
-
 from dotenv import load_dotenv
 
 load_dotenv()   # noqa
 
+import click
+
+from .github import git
 
 AGILE_CONFIG = os.environ.get('AGILE_CONFIG', 'agile.json')
 
@@ -36,3 +37,6 @@ def start(ctx, debug, config):
     ctx.obj['agile'] = agile
     if not ctx.invoked_subcommand:
         click.echo(ctx.get_help())
+
+
+start.add_command(git)
