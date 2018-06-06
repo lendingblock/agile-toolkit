@@ -8,7 +8,7 @@ import yaml
 
 from jinja2 import Template
 
-from .api import GithubApi
+from .api import GithubApi, GithubException
 from .slack import SlackIntegration
 from . import utils
 
@@ -24,8 +24,8 @@ class Branches:
 
 class RepoManager:
 
-    def __init__(self, config, path=None, yes=False, namespace=None):
-        self.config = config
+    def __init__(self, config=None, path=None, yes=False, namespace=None):
+        self.config = config or {}
         self.path = path or os.getcwd()
         self.deploy_path = os.path.join(self.path, 'deploy')
         self.yes = yes
@@ -99,7 +99,10 @@ class RepoManager:
             target = 'stage' if branch == branches.stage else 'dev'
 
         if target == 'stage':
-            self.validate_version()
+            try:
+                self.validate_version()
+            except GithubException:
+                return False
 
         return True
 

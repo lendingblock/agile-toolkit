@@ -2,6 +2,7 @@ from unittest import mock
 from contextlib import contextmanager
 
 from . import utils
+from .api import GithubException
 
 
 @contextmanager
@@ -20,3 +21,7 @@ def gitrepo(branch, pr=False, tag=None, head_id=None):
 
     with mock.patch('agiletoolkit.utils.gitrepo', side_effect=mocker) as m:
         yield m
+
+
+def github_error(*args, **kwargs):
+    raise GithubException
