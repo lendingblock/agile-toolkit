@@ -20,20 +20,20 @@ jobs:
       - run:
           name: upload coverage
           command: bash <(curl -s https://codecov.io/bash)
-    deploy:
-        docker:
-          - image: python:3.6.3
-        steps:
-          - checkout
-          - run:
-              name: install
-              command: sudo python setup.py install sdist bdist_wheel
-          - run:
-              name: upload release
-              command: twine upload dist/*
-          - run:
-              name: create tag
-              command: agilekit git release --yes
+  deploy:
+    docker:
+      - image: python:3.6.3
+    steps:
+      - checkout
+      - run:
+          name: install
+          command: sudo python setup.py install sdist bdist_wheel
+      - run:
+          name: upload release
+          command: twine upload dist/* --username lsbardel --password $PYPI_PASSWORD
+      - run:
+          name: create tag
+          command: agilekit git release --yes
 
 
 workflows:
