@@ -15,6 +15,9 @@ jobs:
           name: test
           command: pytest --cov
       - run:
+          name: validate
+          command: agiletoolkit git validate
+      - run:
           name: upload coverage
           command: bash <(curl -s https://codecov.io/bash)
 
