@@ -1,7 +1,7 @@
 from unittest import mock
 from contextlib import contextmanager
 
-from agiletoolkit import utils
+from . import utils
 
 
 @contextmanager

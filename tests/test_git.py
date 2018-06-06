@@ -4,8 +4,7 @@ from click.testing import CliRunner
 
 from agiletoolkit import __version__
 from agiletoolkit.commands import start
-
-from .conftest import gitrepo
+from agiletoolkit.test import gitrepo
 
 
 def test_git():
