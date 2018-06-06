@@ -22,7 +22,7 @@ jobs:
           command: bash <(curl -s https://codecov.io/bash)
   deploy:
     docker:
-      - image: python:3.6.3
+      - image: circleci/python:3.6
     steps:
       - checkout
       - run:
@@ -42,6 +42,8 @@ workflows:
     jobs:
       - tests
       - deploy:
+          requires:
+            - test
           filters:
             branches:
               only: deploy
