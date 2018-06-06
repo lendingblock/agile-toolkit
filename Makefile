@@ -16,7 +16,7 @@ test:		## Run flake8 and unit tests
 	pytest --cov
 
 version:	## Display version
-	python3 -c "import agilelib; print(agiletoolkit.__version__)"
+	@python3 -c "import agiletoolkit; print(agiletoolkit.__version__)"
 
 codecov:
 	codecov --token $(CODECOV_TOKEN)

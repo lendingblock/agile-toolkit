@@ -38,13 +38,23 @@ class RepoManager:
     def init(self):
         pass
 
+    def software_version(self):
+        """Software version
+
+        Requires the Makefile entry
+
+        version:
+            ....
+        """
+        return utils.version()
+
     def version(self):
         """Software version of the current repository
         """
-        bramches = self.branches()
-        if self.info['branch'] == bramches.stage:
+        branches = self.branches()
+        if self.info['branch'] == branches.stage:
             try:
-                return utils.version()
+                return self.software_version()
             except Exception as exc:
                 raise utils.CommandError(
                     'Could not obtain repo version, do you have a makefile '
@@ -57,9 +67,9 @@ class RepoManager:
         """Validate version by checking if it is a valid semantic version
         and its value is higher than latest github tag
         """
-        version = self.version()
+        version = self.software_version()
         repo = self.github_repo()
-        self.wait(repo.releases.validate_tag(version, prefix))
+        repo.releases.validate_tag(version, prefix)
         return version
 
     def skip_build(self):
@@ -125,11 +135,7 @@ class RepoManager:
         return self.github().repo('.'.join(bits))
 
     def get(self, name: str, DataClass: type) -> object:
-        cfg = self.config.get(name)
-        if not cfg:
-            raise utils.CommandError(
-                '%s key is required in the agile json config' % name
-            )
+        cfg = self.config.get(name) or {}
         return DataClass(**cfg)
 
     def load_data(self, *paths: str) -> Dict:

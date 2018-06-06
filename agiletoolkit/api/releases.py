@@ -24,11 +24,11 @@ class Releases(RepoComponents):
     def assets(self):
         return Assets(self)
 
-    async def latest(self):
+    def latest(self):
         """Get the latest release of this repo
         """
         url = '%s/latest' % self
-        response = await self.http.get(url, auth=self.auth)
+        response = self.http.get(url, auth=self.auth)
         if response.status_code == 200:
             return response.json()
         elif response.status_code != 404:

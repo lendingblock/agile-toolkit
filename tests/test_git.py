@@ -1,11 +1,11 @@
 import json
-from unittest.mock import patch
 
 from click.testing import CliRunner
 
 from agiletoolkit import __version__
 from agiletoolkit.commands import start
-from agiletoolkit.utils import gitrepo
+
+from .conftest import gitrepo
 
 
 def test_git():
@@ -15,13 +15,13 @@ def test_git():
     assert result.output.startswith('Usage:')
 
 
-def test_git_validate(gitrepo):
+def test_git_validate():
     runner = CliRunner()
 
-    gitrepo['branch'] = 'deploy'
-    result = runner.invoke(start, ['git', 'validate'])
-    assert result.exit_code == 0
-    assert result.output.strip() == __version__
+    with gitrepo('deploy'):
+        result = runner.invoke(start, ['git', 'validate'])
+        assert result.exit_code == 0
+        assert result.output.strip() == __version__
 
 
 def test_git_info():
@@ -36,19 +36,13 @@ def test_git_remote():
     runner = CliRunner()
     result = runner.invoke(start, ['git', 'remote'])
     assert result.exit_code == 0
-    assert result.output.strip() == 'lendingblock/agiletoolkit'
+    assert result.output.strip() == 'lendingblock/agile-toolkit'
 
 
 def __test_git_release():
     runner = CliRunner()
 
-    def _gitrepo(root=None):
-        data = gitrepo(root)
-        data['branch'] = 'deploy'
-        data['pr'] = False
-        return data
-
-    with patch('agiletoolkit.utils.gitrepo', side_effect=_gitrepo) as mock:
+    with gitrepo('deploy') as mock:
         result = runner.invoke(start, ['git', 'release'])
         assert result.exit_code == 0
         assert mock.called
@@ -59,12 +53,7 @@ def __test_git_release():
 def test_git_release_skipped():
     runner = CliRunner()
 
-    def _gitrepo(root=None):
-        data = gitrepo(root)
-        data['branch'] = 'master'
-        return data
-
-    with patch('agiletoolkit.utils.gitrepo', side_effect=_gitrepo) as mock:
+    with gitrepo('master') as mock:
         result = runner.invoke(start, ['git', 'release'])
         assert result.exit_code == 0
         assert mock.called

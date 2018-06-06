@@ -11,9 +11,3 @@ dataclasses
 # slack
 slackclient
 #
-# testing and linting
-mypy
-pytest
-pytest-cov
-pytest-aiohttp
-flake8

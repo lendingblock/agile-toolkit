@@ -9,7 +9,7 @@ from ..repo import RepoManager
 @click.option(
     '--yes', is_flag=True,
     help='Commit changes to github', default=False)
-def release(ctx, yes, docker_url):
+def release(ctx, yes):
     """Create a new release in github
     """
     with command():
