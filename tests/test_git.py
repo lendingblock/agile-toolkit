@@ -36,7 +36,7 @@ def test_git_remote():
     runner = CliRunner()
     result = runner.invoke(start, ['git', 'remote'])
     assert result.exit_code == 0
-    assert result.output.strip() == 'lendingblock/platform'
+    assert result.output.strip() == 'lendingblock/agiletoolkit'
 
 
 def __test_git_release():
@@ -48,14 +48,12 @@ def __test_git_release():
         data['pr'] = False
         return data
 
-    with patch('agilelib.utils.gitrepo', side_effect=_gitrepo) as mock:
-        result = runner.invoke(start, ['git', 'release', '--docker-url'])
+    with patch('agiletoolkit.utils.gitrepo', side_effect=_gitrepo) as mock:
+        result = runner.invoke(start, ['git', 'release'])
         assert result.exit_code == 0
         assert mock.called
         data = json.loads(result.output.strip())
         assert data['name'] == 'v%s' % __version__
-        body = data['body'].split('\n')
-        assert body[-1].endswith('amazonaws.com/platform:%s' % __version__)
 
 
 def test_git_release_skipped():
@@ -66,8 +64,8 @@ def test_git_release_skipped():
         data['branch'] = 'master'
         return data
 
-    with patch('agilelib.utils.gitrepo', side_effect=_gitrepo) as mock:
-        result = runner.invoke(start, ['git', 'release', '--docker-url'])
+    with patch('agiletoolkit.utils.gitrepo', side_effect=_gitrepo) as mock:
+        result = runner.invoke(start, ['git', 'release'])
         assert result.exit_code == 0
         assert mock.called
         assert result.output.strip() == 'skipped'

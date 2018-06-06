@@ -2,7 +2,6 @@ import click
 
 from ..utils import command, niceJson
 from ..repo import RepoManager
-from ..aws.dockertools import docker_repo
 
 
 @click.command()
@@ -10,9 +9,6 @@ from ..aws.dockertools import docker_repo
 @click.option(
     '--yes', is_flag=True,
     help='Commit changes to github', default=False)
-@click.option(
-    '--docker-url', is_flag=True,
-    help='Add docker repository url to the release body', default=False)
 def release(ctx, yes, docker_url):
     """Create a new release in github
     """
@@ -22,10 +18,7 @@ def release(ctx, yes, docker_url):
         if m.can_release('stage'):
             version = m.validate_version()
             name = 'v%s' % version
-            body = ['Release %s from agilelib' % name]
-            if docker_url:
-                url = f'{docker_repo(m)}:{m.version()}'
-                body.append('Docker repository %s' % url)
+            body = ['Release %s from agiletoolkit' % name]
             api = m.github_repo()
             data = dict(
                 tag_name=name,
