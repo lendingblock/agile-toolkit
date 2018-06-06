@@ -5,7 +5,7 @@ from . import utils
 
 
 @contextmanager
-def gitrepo(branch, pr=False, tag=None):
+def gitrepo(branch, pr=False, tag=None, head_id=None):
 
     original_gitrepo = utils.gitrepo
 
@@ -14,6 +14,8 @@ def gitrepo(branch, pr=False, tag=None):
         data['branch'] = branch
         data['pr'] = pr
         data['tag'] = tag
+        if head_id:
+            data['head']['id'] = head_id
         return data
 
     with mock.patch('agiletoolkit.utils.gitrepo', side_effect=mocker) as m:
