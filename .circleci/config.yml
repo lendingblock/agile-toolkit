@@ -7,7 +7,7 @@ jobs:
       - checkout
       - run:
           name: install
-          command: python setup.py install && ./dev/install-dev.sh
+          command: sudo python setup.py install && sudo ./dev/install-dev.sh
       - run:
           name: flake8
           command: flake8
@@ -27,7 +27,7 @@ jobs:
           - checkout
           - run:
               name: install
-              command: python setup.py install sdist bdist_wheel
+              command: sudo python setup.py install sdist bdist_wheel
           - run:
               name: upload release
               command: twine upload dist/*
