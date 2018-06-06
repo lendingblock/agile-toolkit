@@ -7,7 +7,7 @@ jobs:
       - checkout
       - run:
           name: install
-          command: sudo ./dev/install.sh
+          command: python setup.py install && ./dev/install-dev.sh
       - run:
           name: flake8
           command: flake8
