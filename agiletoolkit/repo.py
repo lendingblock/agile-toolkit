@@ -1,4 +1,5 @@
 import os
+import re
 import asyncio
 from typing import Dict
 from dataclasses import dataclass
@@ -61,7 +62,9 @@ class RepoManager:
                     'with version entry?\n%s' % exc
                 )
         else:
-            return f"{self.info['branch']}-{self.info['head']['id'][:8]}"
+            branch = self.info['branch'].lower()
+            branch = re.sub('[^a-z0-9_-]+', '-', branch)
+            return f"{branch}-{self.info['head']['id'][:8]}"
 
     def validate_version(self, prefix='v'):
         """Validate version by checking if it is a valid semantic version
