@@ -31,3 +31,9 @@ def test_repo(mocker):
         m = RepoManager()
         m.validate_version = mocker.Mock(side_effect=GithubException('test'))
         assert m.can_release() is False
+
+
+def test_docker_tag():
+    with gitrepo('feature/ABC-123/bla-bla', head_id='1234567890'):
+        m = RepoManager()
+        assert m.version() == 'feature-abc-123-bla-bla-12345678'
