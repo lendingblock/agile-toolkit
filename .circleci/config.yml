@@ -43,7 +43,7 @@ workflows:
       - tests
       - deploy-release:
           requires:
-            - test
+            - tests
           filters:
             branches:
               only: deploy

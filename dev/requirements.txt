@@ -11,4 +11,4 @@ dataclasses
 # slack
 slackclient
 #
--e git+https://github.com/lendingblock/aio-kong.git#egg=aio-kong
+aio-kong

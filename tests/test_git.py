@@ -77,7 +77,7 @@ def test_labels_error():
     )
 
 
-def __test_git_labels():
+def test_git_labels():
     runner = CliRunner()
     result = runner.invoke(start, ['labels'])
     assert result.exit_code == 0
