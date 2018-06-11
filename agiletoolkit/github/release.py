@@ -33,7 +33,7 @@ def release(ctx, yes, latest):
             prerelease=False
         )
         if yes:
-            data = m.wait(api.releases.create(data=data))
+            data = api.releases.create(data=data)
             m.message('Successfully created a new Github release')
         click.echo(niceJson(data))
     else:
