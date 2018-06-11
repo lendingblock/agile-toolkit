@@ -2,6 +2,8 @@ import os
 
 from setuptools import setup, find_packages
 
+import agiletoolkit as pkg
+
 
 def read(name):
     filename = os.path.join(os.path.dirname(__file__), name)
@@ -28,8 +30,8 @@ def requirements(name):
 
 
 meta = dict(
-    version='0.1.0',
-    description='Python utility for devops and project management',
+    version=pkg.__version__,
+    description=pkg.__doc__,
     name='agile-toolkit',
     author='Luca Sbardella',
     author_email="luca@lendingblock.com",

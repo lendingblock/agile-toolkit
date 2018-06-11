@@ -1,10 +1,7 @@
-from asyncio import gather
-
 import click
 
 from ..api import GithubApi
 from .utils import get_repos
-from ..utils import wait
 
 
 @click.command()
@@ -18,40 +15,35 @@ def milestones(ctx, list, close):
     """
     repos = get_repos(ctx.parent.agile.get('labels'))
     if list:
-        wait(_list_milestones(repos))
+        _list_milestones(repos)
     elif close:
         click.echo('Closing milestones "%s"' % close)
-        wait(_close_milestone(repos, close))
+        _close_milestone(repos, close)
     else:
         click.echo(ctx.get_help())
 
 
-async def _list_milestones(repos):
+def _list_milestones(repos):
     git = GithubApi()
-    requests = []
+    milestones = set()
     for repo in repos:
         repo = git.repo(repo)
-        requests.append(repo.milestones.get_list())
-    data = await gather(*requests)
-    milestones = set()
-    for repo in data:
-        milestones.update((data['title'] for data in repo))
+        stones = repo.milestones.get_list()
+        milestones.update((data['title'] for data in stones))
     for title in sorted(milestones):
         click.echo(title)
 
 
 def _close_milestone(repos, milestone):
     git = GithubApi()
-    requests = []
     for repo in repos:
         repo = git.repo(repo)
-        requests.append(_close_repo_milestone(repo, milestone))
-    return gather(*requests)
+        _close_repo_milestone(repo, milestone)
 
 
-async def _close_repo_milestone(repo, milestone):
-    milestones = await repo.milestones.get_list()
+def _close_repo_milestone(repo, milestone):
+    milestones = repo.milestones.get_list()
     for m in milestones:
         if m['title'] == milestone:
-            await repo.milestones.update(m, {'state': 'closed'})
+            repo.milestones.update(m, {'state': 'closed'})
             click.echo('Closed milestone %s' % m['html_url'])
