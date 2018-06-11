@@ -26,6 +26,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: install-dev
+          command: sudo./dev/install-dev.sh
+      - run:
           name: install
           command: sudo python setup.py install sdist bdist_wheel
       - run:
