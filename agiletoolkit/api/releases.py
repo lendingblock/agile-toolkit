@@ -34,21 +34,21 @@ class Releases(RepoComponents):
         elif response.status_code != 404:
             response.raise_for_status()
 
-    async def tag(self, tag):
+    def tag(self, tag):
         """Get a release by tag
         """
         url = '%s/tags/%s' % (self, tag)
-        response = await self.http.get(url, auth=self.auth)
+        response = self.http.get(url, auth=self.auth)
         response.raise_for_status()
         return response.json()
 
-    async def delete(self, id=None, tag=None):
+    def delete(self, id=None, tag=None):
         if tag:
             assert not id, "provide either tag or id to delete"
-            release = await self.tag(tag)
+            release = self.tag(tag)
             id = release['id']
         assert id, "id not given"
-        return await super().delete(id)
+        return super().delete(id)
 
     def release_assets(self, release):
         """Assets for a given release
