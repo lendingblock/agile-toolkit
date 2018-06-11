@@ -41,15 +41,10 @@ def test_git_remote():
     assert result.output.strip() == 'lendingblock/agile-toolkit'
 
 
-def __test_git_release():
+def test_git_release_latest():
     runner = CliRunner()
-
-    with gitrepo('deploy') as mock:
-        result = runner.invoke(start, ['git', 'release'])
-        assert result.exit_code == 0
-        assert mock.called
-        data = json.loads(result.output.strip())
-        assert data['name'] == 'v%s' % __version__
+    result = runner.invoke(start, ['git', 'release', '--latest'])
+    assert result.exit_code == 0
 
 
 def test_git_release_skipped():
