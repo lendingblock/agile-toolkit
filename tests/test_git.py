@@ -1,11 +1,13 @@
 import json
+from unittest import mock
 
 from click.testing import CliRunner
 
 from agiletoolkit import __version__
 from agiletoolkit.commands import start
+from agiletoolkit.test import gitrepo
 
-from .conftest import gitrepo
+from .utils import mock_response
 
 
 def test_git():
@@ -78,8 +80,11 @@ def test_labels_error():
     )
 
 
-def __test_git_labels():
+def test_git_labels():
     runner = CliRunner()
-    result = runner.invoke(start, ['labels'])
-    assert result.exit_code == 0
-    assert result.output.startswith('Usage:')
+    with mock.patch('requests.Session') as ses:
+        ses.return_value = mock_response()
+        result = runner.invoke(start, [
+            '--config', 'tests/cfg3.json', 'git', 'labels'
+        ])
+        assert result.exit_code == 0

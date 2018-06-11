@@ -11,3 +11,4 @@ dataclasses
 # slack
 slackclient
 #
+aio-kong

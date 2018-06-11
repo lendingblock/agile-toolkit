@@ -1,9 +1,7 @@
-from asyncio import gather
-
 import click
 
 from ..api import GithubApi
-from ..utils import wait, CommandError
+from ..utils import CommandError
 
 
 @click.command()
@@ -22,21 +20,11 @@ def labels(ctx):
         raise CommandError(
             'You need to specify the "labels" dictionary in the config'
         )
-    wait(_labels(repos, labels))
-
-
-async def _labels(repos, labels):
     git = GithubApi()
     for repo in repos:
         repo = git.repo(repo)
-        requests = []
-        for name, color in labels.items():
-            requests.append(_repo_label(repo, name, color))
-        await gather(*requests)
-
-
-async def _repo_label(repo, label, color):
-    if await repo.label(label, color):
-        click.echo('Created label "%s" @ %s' % (label, repo))
-    else:
-        click.echo('Updated label "%s" @ %s' % (label, repo))
+        for label, color in labels.items():
+            if repo.label(label, color):
+                click.echo('Created label "%s" @ %s' % (label, repo))
+            else:
+                click.echo('Updated label "%s" @ %s' % (label, repo))

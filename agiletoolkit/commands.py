@@ -8,6 +8,7 @@ load_dotenv()   # noqa
 import click
 
 from .github import git
+from .kong import kong
 
 AGILE_CONFIG = os.environ.get('AGILE_CONFIG', 'agile.json')
 
@@ -40,3 +41,4 @@ def start(ctx, debug, config):
 
 
 start.add_command(git)
+start.add_command(kong)
