@@ -34,6 +34,9 @@ jobs:
       - run:
           name: install agilekit
           command: sudo python setup.py install
+    - run:
+          name: git info
+          command: agilekit git info
       - run:
           name: validate version
           command: agilekit git validate
