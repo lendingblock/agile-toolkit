@@ -13,7 +13,7 @@ from .import utils
 @click.option('--namespace', default='dev', help='target namespace')
 @click.option(
     '--yes', is_flag=True,
-    help='commit changes to kubernetes', default=False)
+    help='commit changes to kong', default=False)
 def kong(ctx, namespace, yes):
     """Update the kong configuration
     """
