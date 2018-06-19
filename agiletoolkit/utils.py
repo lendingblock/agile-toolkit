@@ -126,12 +126,16 @@ def gitrepo(root=None):
         )
     if branch.startswith('remotes/origin/'):
         branch = branch[15:]
-    # branch = sh('git rev-parse --abbrev-ref HEAD', cwd=root).strip()
+    try:
+        current_tag = sh('git tag --points-at HEAD')
+    except CommandError:
+        current_tag = ''
     try:
         tag = sh('git describe --tags --abbrev=0')
     except CommandError:
         tag = ''
     tag = tag.strip()
+    current_tag = current_tag.strip()
     remotes = [x.split() for x in
                filter(lambda x: x.endswith('(fetch)'),
                       sh('git remote -v', cwd=root).strip().splitlines())]
@@ -147,6 +151,7 @@ def gitrepo(root=None):
             "message": gitlog[5].strip(),
         },
         "branch": branch,
+        "current_tag": current_tag,
         "tag": tag,
         "pr": bool(PR_RE.match(branch)),
         "remotes": [{'name': remote[0], 'url': remote[1]}

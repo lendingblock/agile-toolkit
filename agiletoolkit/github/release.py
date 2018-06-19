@@ -18,7 +18,9 @@ def release(ctx, yes, latest):
     m = RepoManager(ctx.obj['agile'])
     api = m.github_repo()
     if latest:
-        click.echo(api.releases.latest() or '')
+        latest = api.releases.latest()
+        if latest:
+            click.echo(latest['tag_name'])
     elif m.can_release('stage'):
         branch = m.info['branch']
         version = m.validate_version()

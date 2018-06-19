@@ -45,6 +45,7 @@ def test_git_release_latest():
     runner = CliRunner()
     result = runner.invoke(start, ['git', 'release', '--latest'])
     assert result.exit_code == 0
+    assert result.output.strip().startswith('v')
 
 
 def test_git_release_skipped():
