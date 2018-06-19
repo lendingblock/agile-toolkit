@@ -81,7 +81,7 @@ class RepoManager:
         skip_msg = self.config.get('skip', '[ci skip]')
         return (
             os.environ.get('CODEBUILD_BUILD_SUCCEEDING') == '0' or
-            self.info['tag'] or
+            self.info['current_tag'] or
             skip_msg in self.info['head']['message']
         )
 
