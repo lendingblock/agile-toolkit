@@ -38,6 +38,7 @@ meta = dict(
     maintainer_email="luca@lendingblock.com",
     url="https://github.com/lendingblock/agile-toolkit",
     long_description=read('readme.md'),
+    long_description_content_type='text/markdown',
     packages=find_packages(exclude=['tests', 'tests.*']),
     include_package_data=True,
     zip_safe=False,
