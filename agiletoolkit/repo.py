@@ -155,6 +155,7 @@ class RepoManager:
             data.pop(namespace, None)
         if data_namespace:
             data.update(data_namespace)
+        data['namespace'] = self.namespace
         return data
 
     def manifest(self, values, *paths, filename=None):

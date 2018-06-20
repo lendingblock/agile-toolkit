@@ -1,3 +1,5 @@
+import yaml
+
 from click.testing import CliRunner
 
 from agiletoolkit.commands import start
@@ -37,3 +39,26 @@ def test_docker_tag():
     with gitrepo('feature/ABC-123/bla-bla', head_id='1234567890'):
         m = RepoManager()
         assert m.version() == 'feature-abc-123-bla-bla-12345678'
+
+
+def test_load_data(mocker):
+    with gitrepo('deploy'):
+        m = RepoManager(namespace='dev')
+        with open('./deploy/values.yaml', 'w') as f:
+            f.write(yaml.dump({
+                'foo': '1',
+                'bar': '2',
+                'dev': {
+                    'bar': '3',
+                },
+                'production': {
+                    'bar': '4',
+                },
+            }))
+        data = m.load_data('values.yaml')
+        expected = {
+            'foo': '1',
+            'bar': '3',
+            'namespace': 'dev',
+        }
+        assert data == expected
