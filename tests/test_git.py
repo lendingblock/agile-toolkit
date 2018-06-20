@@ -3,7 +3,6 @@ from unittest import mock
 
 from click.testing import CliRunner
 
-from agiletoolkit import __version__
 from agiletoolkit.commands import start
 from agiletoolkit.test import gitrepo
 
@@ -19,11 +18,10 @@ def test_git():
 
 def test_git_validate():
     runner = CliRunner()
-
     with gitrepo('deploy'):
         result = runner.invoke(start, ['git', 'validate'])
         assert result.exit_code == 0
-        assert result.output.strip() == __version__
+        assert result.output.strip() == '1.2.3'
 
 
 def test_git_info():
