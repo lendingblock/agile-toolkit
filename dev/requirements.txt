@@ -11,4 +11,4 @@ dataclasses
 # slack
 slackclient
 #
-aio-kong
+aio-kong>=0.2.1

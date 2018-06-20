@@ -2,6 +2,7 @@ import yaml
 
 from click.testing import CliRunner
 
+from agiletoolkit import __version__
 from agiletoolkit.commands import start
 from agiletoolkit.repo import RepoManager
 from agiletoolkit.test import gitrepo
@@ -18,9 +19,16 @@ def test_main():
     assert result.exit_code == 0
     assert result.output.startswith('Usage:')
     #
-    result = runner.invoke(start, '--config', 'tests/cfg1.json')
-    assert result.exit_code == 2
+    result = runner.invoke(start, ['--config', 'tests/cfg1.json'])
+    assert result.exit_code == 0
     assert result.output.startswith('Usage:')
+
+
+def test_version():
+    runner = CliRunner()
+    result = runner.invoke(start, ['--version'])
+    assert result.exit_code == 0
+    assert result.output.strip() == __version__
 
 
 def test_repo(mocker):
