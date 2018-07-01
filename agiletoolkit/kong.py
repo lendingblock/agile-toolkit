@@ -1,5 +1,3 @@
-import socket
-
 import click
 
 from kong.client import Kong, KongError
@@ -27,11 +25,6 @@ class KongManager(RepoManager):
         data = self.load_data('values.yaml')
         values = data.copy()
         manifest = self.manifest(values, 'kong.yaml')
-        print(self.namespace)
-        if self.namespace == 'local':
-            ip = socket.gethostbyname(socket.gethostname())
-            for srv in manifest.get('services') or ():
-                srv['host'] = ip
         if yes:
             return self.wait(self.apply_kong(manifest))
         else:
