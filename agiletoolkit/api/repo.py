@@ -1,4 +1,4 @@
-from .components import Commits, Pulls, Issues, Component, Milestones
+from .components import Commits, Pulls, Issues, Component, Milestones, Hooks
 from .releases import Releases
 
 
@@ -13,6 +13,7 @@ class GitRepo(Component):
         self.issues = Issues(self)
         self.pulls = Pulls(self)
         self.milestones = Milestones(self)
+        self.hooks = Hooks(self)
         self.headers = dict(
             accept='application/vnd.github.symmetra-preview+json'
         )
