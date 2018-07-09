@@ -153,3 +153,7 @@ class Pulls(Issues):
 
 class Milestones(Issues):
     pass
+
+
+class Hooks(RepoComponents):
+    pass
