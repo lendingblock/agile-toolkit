@@ -1,7 +1,5 @@
 import os
 import re
-import asyncio
-from typing import Dict
 from dataclasses import dataclass
 from urllib.parse import urlparse
 
