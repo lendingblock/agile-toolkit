@@ -14,7 +14,9 @@ from .slack import SlackIntegration
 from . import utils
 
 
-NAMESPACES = {'local', 'dev', 'stage', 'sandbox', 'production'}
+NAMESPACES = {
+    'local', 'development', 'dev', 'stage', 'prod', 'sandbox', 'production'
+}
 
 
 @dataclass
