@@ -1,4 +1,5 @@
 import os
+import sys
 
 from setuptools import setup, find_packages
 
@@ -29,6 +30,13 @@ def requirements(name):
     return install_requires, dependency_links
 
 
+install_requires = requirements('dev/requirements.txt')[0]
+
+
+if sys.version_info < (3, 7):
+    install_requires.append('dataclasses')
+
+
 meta = dict(
     version=pkg.__version__,
     description=pkg.__doc__,
@@ -42,7 +50,7 @@ meta = dict(
     packages=find_packages(exclude=['tests', 'tests.*']),
     include_package_data=True,
     zip_safe=False,
-    install_requires=requirements('dev/requirements.txt')[0],
+    install_requires=install_requires,
     entry_points={
         "console_scripts": [
             "agilekit=agiletoolkit.commands:start"
