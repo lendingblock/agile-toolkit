@@ -82,7 +82,7 @@ def shi(command, cwd=None, echo=None, env=None):
 def command():
     try:
         yield
-    except CommandError as exc:
+    except CommandError:
         raise
 
 
