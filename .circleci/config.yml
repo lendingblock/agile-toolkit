@@ -1,8 +1,19 @@
 version: 2
 jobs:
-  tests:
+  tests36:
     docker:
       - image: circleci/python:3.6
+    steps:
+      - checkout
+      - run:
+          name: install
+          command: sudo python setup.py install && sudo ./dev/install-dev.sh
+      - run:
+          name: test
+          command: pytest
+  tests:
+    docker:
+      - image: circleci/python:3.7
     steps:
       - checkout
       - run:
@@ -49,9 +60,11 @@ workflows:
   version: 2
   build-deploy:
     jobs:
+      - tests36
       - tests
       - deploy-release:
           requires:
+            - tests36
             - tests
           filters:
             branches:
