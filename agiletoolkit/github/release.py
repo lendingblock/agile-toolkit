@@ -21,7 +21,7 @@ def release(ctx, yes, latest):
         latest = api.releases.latest()
         if latest:
             click.echo(latest['tag_name'])
-    elif m.can_release('stage'):
+    elif m.can_release('sandbox'):
         branch = m.info['branch']
         version = m.validate_version()
         name = 'v%s' % version
