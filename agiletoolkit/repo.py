@@ -12,7 +12,7 @@ from . import utils
 @dataclass
 class Branches:
     dev: str = 'master'
-    stage: str = 'deploy'
+    sandbox: str = 'deploy'
 
 
 class RepoManager(Manager):
@@ -35,7 +35,7 @@ class RepoManager(Manager):
         """Software version of the current repository
         """
         branches = self.branches()
-        if self.info['branch'] == branches.stage:
+        if self.info['branch'] == branches.sandbox:
             try:
                 return self.software_version()
             except Exception as exc:
@@ -74,16 +74,16 @@ class RepoManager(Manager):
         branch = self.info['branch']
         branches = self.branches()
 
-        if branch not in (branches.dev, branches.stage):
+        if branch not in (branches.dev, branches.sandbox):
             return False
 
         if target and branch != getattr(branches, target):
             return False
 
         if not target:
-            target = 'stage' if branch == branches.stage else 'dev'
+            target = 'sandbox' if branch == branches.sandbox else 'dev'
 
-        if target == 'stage':
+        if target == 'sandbox':
             try:
                 self.validate_version()
             except GithubException:
@@ -108,7 +108,7 @@ class RepoManager(Manager):
 
     def target_from_branch(self):
         branches = self.branches()
-        return 'dev' if self.info['branch'] == branches.dev else 'stage'
+        return 'dev' if self.info['branch'] == branches.dev else 'sandbox'
 
     def github_repo(self) -> str:
         url = self.info['remotes'][0]['url']
