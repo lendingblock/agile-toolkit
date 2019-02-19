@@ -63,7 +63,7 @@ def test_load_data(mocker):
                     'bar': '4',
                 },
             }))
-        data = m.load_data('values.yaml')
+        data = m.load_data('deploy', 'values.yaml')
         expected = {
             'foo': '1',
             'bar': '3',

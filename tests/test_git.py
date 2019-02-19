@@ -36,7 +36,7 @@ def test_git_remote():
     runner = CliRunner()
     result = runner.invoke(start, ['git', 'remote'])
     assert result.exit_code == 0
-    assert result.output.strip() == 'lendingblock/agile-toolkit'
+    assert result.output.strip() == 'quantmind/agile-toolkit'
 
 
 def test_git_release_latest():
