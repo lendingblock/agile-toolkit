@@ -19,7 +19,6 @@ class Manager:
     def __init__(self, config=None, path=None, yes=False, namespace=None):
         self.config = config or {}
         self.path = path or os.getcwd()
-        self.deploy_path = os.path.join(self.path, 'deploy')
         self.yes = yes
         self.message_brokers = []
         self.namespace = namespace
@@ -32,8 +31,8 @@ class Manager:
         cfg = self.config.get(name) or {}
         return DataClass(**cfg)
 
-    def load_data(self, *paths: str) -> Dict:
-        filename = self.filename(*paths)
+    def load_data(self, *paths: str, filename: str = None) -> Dict:
+        filename = filename or self.filename(*paths)
         if not os.path.isfile(filename):
             raise utils.CommandError('%s file missing' % filename)
         with open(filename, 'r') as fp:
@@ -46,7 +45,7 @@ class Manager:
         data['namespace'] = self.namespace
         return data
 
-    def manifest(self, values, *paths, filename=None):
+    def manifest(self, values, *paths, filename: str = None) -> Dict:
         """Load a manifest file and apply template values
         """
         filename = filename or self.filename(*paths)
@@ -54,12 +53,8 @@ class Manager:
             template = Template(fp.read())
         return yaml.load(template.render(values))
 
-    def filename(self, *paths):
-        if not os.path.isdir(self.deploy_path):
-            raise utils.CommandError(
-                "Path '%s' not available" % self.deploy_path
-            )
-        return os.path.join(self.deploy_path, *paths)
+    def filename(self, *paths) -> str:
+        return os.path.join(self.path, *paths)
 
     def copy_env(self, *args, **kw):
         env = os.environ.copy()
