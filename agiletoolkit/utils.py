@@ -160,4 +160,4 @@ def gitrepo(root=None):
 
 
 def version() -> str:
-    return sh("make version").strip().split()[-1]
+    return sh("make version").strip()
