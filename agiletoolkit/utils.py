@@ -1,15 +1,14 @@
+import json
 import os
 import re
-import json
 import subprocess
 from asyncio import get_event_loop
 from contextlib import contextmanager
 
 import click
 
-
-PR_RE = re.compile('pr-*')
-FORMAT = '%n'.join(['%H', '%aN', '%ae', '%cN', '%ce', '%s'])
+PR_RE = re.compile("pr-*")
+FORMAT = "%n".join(["%H", "%aN", "%ae", "%cN", "%ce", "%s"])
 
 
 class CommandError(click.ClickException):
@@ -41,7 +40,7 @@ def sh(command, cwd=None, echo=None, env=None):
         shell=True,
         cwd=cwd,
         env=env,
-        universal_newlines=True
+        universal_newlines=True,
     )
     p.wait()
     out, err = p.communicate()
@@ -63,7 +62,7 @@ def shi(command, cwd=None, echo=None, env=None):
         shell=True,
         cwd=cwd,
         env=dict(os.environ, **env),
-        universal_newlines=True
+        universal_newlines=True,
     )
     while True:
         line = p.stdout.readline()
@@ -87,7 +86,7 @@ def command():
 
 
 def error(exc):
-    click.secho('ERROR: %s' % exc, err=True, fg='red', bold=True)
+    click.secho("ERROR: %s" % exc, err=True, fg="red", bold=True)
 
 
 def niceJson(data):
@@ -100,13 +99,12 @@ def semantic_version(tag):
     """Get a valid semantic version for tag
     """
     try:
-        version = list(map(int, tag.split('.')))
+        version = list(map(int, tag.split(".")))
         assert len(version) == 3
         return tuple(version)
     except Exception as exc:
         raise CommandError(
-            'Could not parse "%s", please use '
-            'MAJOR.MINOR.PATCH' % tag
+            'Could not parse "%s", please use ' "MAJOR.MINOR.PATCH" % tag
         ) from exc
 
 
@@ -117,28 +115,31 @@ def gitrepo(root=None):
         cwd = os.getcwd()
         if cwd != root:
             os.chdir(root)
-    gitlog = sh('git --no-pager log -1 --pretty="format:%s"' % FORMAT,
-                cwd=root).split('\n', 5)
-    branch = sh('git symbolic-ref HEAD --short 2>/dev/null', cwd=root).strip()
+    gitlog = sh('git --no-pager log -1 --pretty="format:%s"' % FORMAT, cwd=root).split(
+        "\n", 5
+    )
+    branch = sh("git symbolic-ref HEAD --short 2>/dev/null", cwd=root).strip()
     if not branch:
-        branch = sh(
-            "git branch -a --contains HEAD | sed -n 2p | awk '{ printf $1 }'"
-        )
-    if branch.startswith('remotes/origin/'):
+        branch = sh("git branch -a --contains HEAD | sed -n 2p | awk '{ printf $1 }'")
+    if branch.startswith("remotes/origin/"):
         branch = branch[15:]
     try:
-        current_tag = sh('git tag --points-at HEAD')
+        current_tag = sh("git tag --points-at HEAD")
     except CommandError:
-        current_tag = ''
+        current_tag = ""
     try:
-        tag = sh('git describe --tags --abbrev=0')
+        tag = sh("git describe --tags --abbrev=0")
     except CommandError:
-        tag = ''
+        tag = ""
     tag = tag.strip()
     current_tag = current_tag.strip()
-    remotes = [x.split() for x in
-               filter(lambda x: x.endswith('(fetch)'),
-                      sh('git remote -v', cwd=root).strip().splitlines())]
+    remotes = [
+        x.split()
+        for x in filter(
+            lambda x: x.endswith("(fetch)"),
+            sh("git remote -v", cwd=root).strip().splitlines(),
+        )
+    ]
     if cwd != root:
         os.chdir(cwd)
     return {
@@ -154,10 +155,9 @@ def gitrepo(root=None):
         "current_tag": current_tag,
         "tag": tag,
         "pr": bool(PR_RE.match(branch)),
-        "remotes": [{'name': remote[0], 'url': remote[1]}
-                    for remote in remotes]
+        "remotes": [{"name": remote[0], "url": remote[1]} for remote in remotes],
     }
 
 
 def version():
-    return sh('make version').strip().split()[-1]
+    return sh("make version").strip().split()[-1]

@@ -4,8 +4,8 @@ from .info import info
 from .labels import labels
 from .milestones import milestones
 from .release import release
-from .validate import validate
 from .remote import remote
+from .validate import validate
 
 
 @click.group(invoke_without_command=True)

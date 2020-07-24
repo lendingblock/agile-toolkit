@@ -1,0 +1,35 @@
+name: build
+
+on:
+  push:
+    branches-ignore:
+      - deploy
+    tags-ignore:
+      - v*
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    env:
+      PYTHON_ENV: ci
+      CODECOV_TOKEN: d39c47c0-afa6-49a3-8c22-5c3599ecc771
+    strategy:
+      matrix:
+        python-version: [3.6, 3.7, 3.8]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: make install
+    - name: run lint
+      run: make test-lint
+    - name: run tests
+      run: make test
+    - name: upload coverage
+      if: matrix.python-version == '3.8'
+      run: make codecov

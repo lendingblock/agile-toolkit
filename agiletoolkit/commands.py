@@ -1,9 +1,5 @@
-import os
 import json
-
-from dotenv import load_dotenv
-
-load_dotenv()   # noqa
+import os
 
 import click
 
@@ -11,26 +7,19 @@ from . import __version__
 from .github import git
 from .kong import kong
 
-AGILE_CONFIG = os.environ.get('AGILE_CONFIG', 'agile.json')
+AGILE_CONFIG = os.environ.get("AGILE_CONFIG", "agile.json")
 
 
 @click.group(invoke_without_command=True)
 @click.option(
-    '--debug/--no-debug',
-    is_flag=True,
-    default=False,
-    help='Run in debug mode'
+    "--debug/--no-debug", is_flag=True, default=False, help="Run in debug mode"
 )
+@click.option("--version", is_flag=True, default=False, help="Display version and exit")
 @click.option(
-    '--version',
-    is_flag=True,
-    default=False,
-    help='Display version and exit'
-)
-@click.option(
-    '--config', default=AGILE_CONFIG,
+    "--config",
+    default=AGILE_CONFIG,
     type=click.Path(),
-    help=f'Agile configuration json file location ({AGILE_CONFIG})'
+    help=f"Agile configuration json file location ({AGILE_CONFIG})",
 )
 @click.pass_context
 def start(ctx, debug, version, config):
@@ -42,7 +31,7 @@ def start(ctx, debug, version, config):
             agile = json.load(fp)
     else:
         agile = {}
-    ctx.obj['agile'] = agile
+    ctx.obj["agile"] = agile
     if version:
         click.echo(__version__)
         ctx.exit(0)

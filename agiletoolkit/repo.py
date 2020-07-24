@@ -3,20 +3,19 @@ import re
 from dataclasses import dataclass
 from urllib.parse import urlparse
 
-from .manager import Manager
-from .api import GithubApi, GithubException
-from .slack import SlackIntegration
 from . import utils
+from .api import GithubApi, GithubException
+from .manager import Manager
+from .slack import SlackIntegration
 
 
 @dataclass
 class Branches:
-    dev: str = 'master'
-    sandbox: str = 'deploy'
+    dev: str = "master"
+    sandbox: str = "deploy"
 
 
 class RepoManager(Manager):
-
     def init(self):
         self.info = utils.gitrepo(self.path)
         SlackIntegration.add(self)
@@ -35,20 +34,20 @@ class RepoManager(Manager):
         """Software version of the current repository
         """
         branches = self.branches()
-        if self.info['branch'] == branches.sandbox:
+        if self.info["branch"] == branches.sandbox:
             try:
                 return self.software_version()
             except Exception as exc:
                 raise utils.CommandError(
-                    'Could not obtain repo version, do you have a makefile '
-                    'with version entry?\n%s' % exc
+                    "Could not obtain repo version, do you have a makefile "
+                    "with version entry?\n%s" % exc
                 )
         else:
-            branch = self.info['branch'].lower()
-            branch = re.sub('[^a-z0-9_-]+', '-', branch)
+            branch = self.info["branch"].lower()
+            branch = re.sub("[^a-z0-9_-]+", "-", branch)
             return f"{branch}-{self.info['head']['id'][:8]}"
 
-    def validate_version(self, prefix='v'):
+    def validate_version(self, prefix="v"):
         """Validate version by checking if it is a valid semantic version
         and its value is higher than latest github tag
         """
@@ -60,18 +59,18 @@ class RepoManager(Manager):
     def skip_build(self):
         """Check if build should be skipped
         """
-        skip_msg = self.config.get('skip', '[ci skip]')
+        skip_msg = self.config.get("skip", "[ci skip]")
         return (
-            os.environ.get('CODEBUILD_BUILD_SUCCEEDING') == '0' or
-            self.info['current_tag'] or
-            skip_msg in self.info['head']['message']
+            os.environ.get("CODEBUILD_BUILD_SUCCEEDING") == "0"
+            or self.info["current_tag"]
+            or skip_msg in self.info["head"]["message"]
         )
 
     def can_release(self, target=None):
         if self.skip_build() or self.info["pr"]:
             return False
 
-        branch = self.info['branch']
+        branch = self.info["branch"]
         branches = self.branches()
 
         if branch not in (branches.dev, branches.sandbox):
@@ -81,9 +80,9 @@ class RepoManager(Manager):
             return False
 
         if not target:
-            target = 'sandbox' if branch == branches.sandbox else 'dev'
+            target = "sandbox" if branch == branches.sandbox else "dev"
 
-        if target == 'sandbox':
+        if target == "sandbox":
             try:
                 self.validate_version()
             except GithubException:
@@ -95,20 +94,20 @@ class RepoManager(Manager):
         return GithubApi()
 
     def branches(self):
-        return self.get('branches', Branches)
+        return self.get("branches", Branches)
 
     def target_from_branch(self):
         branches = self.branches()
-        return 'dev' if self.info['branch'] == branches.dev else 'sandbox'
+        return "dev" if self.info["branch"] == branches.dev else "sandbox"
 
     def github_repo(self) -> str:
-        url = self.info['remotes'][0]['url']
-        if url.startswith('git@'):
-            url = url.split(':')
-            assert url[0] == 'git@github.com'
+        url = self.info["remotes"][0]["url"]
+        if url.startswith("git@"):
+            url = url.split(":")
+            assert url[0] == "git@github.com"
             path = url[1]
         else:
             path = urlparse(url).path[1:]
-        bits = path.split('.')
+        bits = path.split(".")
         bits.pop()
-        return self.github().repo('.'.join(bits))
+        return self.github().repo(".".join(bits))

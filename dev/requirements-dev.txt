@@ -1,8 +1,25 @@
-# testing and linting
-mypy
+# linters
+black
+isort
+flake8
+flake8-blind-except
+flake8-builtins
+flake8-commas
+
+# coverage
+codecov
+coverage
+coveralls
+
+# test
 pytest
 pytest-cov
-pytest-mock
 pytest-aiohttp
-flake8
+pytest-mock
+asynctest
+
+# mypy & stubs
+mypy
+
+# deploy
 twine

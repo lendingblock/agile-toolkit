@@ -6,14 +6,12 @@ from .utils import get_repos
 
 @click.command()
 @click.pass_context
-@click.option(
-    '--list', is_flag=True,
-    help='list open milestones', default=False)
-@click.option('--close', help='milestone to close', default='')
+@click.option("--list", is_flag=True, help="list open milestones", default=False)
+@click.option("--close", help="milestone to close", default="")
 def milestones(ctx, list, close):
     """View/edit/close milestones on github
     """
-    repos = get_repos(ctx.parent.agile.get('labels'))
+    repos = get_repos(ctx.parent.agile.get("labels"))
     if list:
         _list_milestones(repos)
     elif close:
@@ -29,7 +27,7 @@ def _list_milestones(repos):
     for repo in repos:
         repo = git.repo(repo)
         stones = repo.milestones.get_list()
-        milestones.update((data['title'] for data in stones))
+        milestones.update((data["title"] for data in stones))
     for title in sorted(milestones):
         click.echo(title)
 
@@ -44,6 +42,6 @@ def _close_milestone(repos, milestone):
 def _close_repo_milestone(repo, milestone):
     milestones = repo.milestones.get_list()
     for m in milestones:
-        if m['title'] == milestone:
-            repo.milestones.update(m, {'state': 'closed'})
-            click.echo('Closed milestone %s' % m['html_url'])
+        if m["title"] == milestone:
+            repo.milestones.update(m, {"state": "closed"})
+            click.echo("Closed milestone %s" % m["html_url"])
