@@ -160,6 +160,6 @@ def gitrepo(root=None):
 
 
 def version():
-    version = sh("make version")
+    version = sh("make -s version")
     print("Got this from make version\n%s\n------\n" % version)
     return version.strip().split()[-1]
