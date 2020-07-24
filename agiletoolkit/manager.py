@@ -7,13 +7,8 @@ from jinja2 import Template
 
 from . import utils
 
-<<<<<<< HEAD
-NAMESPACES = {
-    'local', 'development', 'dev', 'stage', 'prod', 'sandbox', 'production'
-}
-=======
+
 NAMESPACES = {"local", "development", "dev", "stage", "prod", "sandbox", "production"}
->>>>>>> e7e843b... Add linters
 
 
 class Manager:
