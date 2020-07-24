@@ -1,7 +1,6 @@
 import json
 from unittest import mock
 
-import pytest
 from click.testing import CliRunner
 
 from agiletoolkit.commands import start
@@ -17,7 +16,6 @@ def test_git():
     assert result.output.startswith("Usage:")
 
 
-@pytest.mark.skip("This fails in CI")
 def test_git_validate():
     runner = CliRunner()
     with gitrepo("deploy"):
