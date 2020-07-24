@@ -1,4 +1,5 @@
 import os
+
 from slack import WebClient
 
 
@@ -7,7 +8,7 @@ class SlackIntegration:
 
     def __init__(self, manager):
         self.manager = manager
-        self.channel = manager.config.get('slack_channel', 'agile')
+        self.channel = manager.config.get("slack_channel", "agile")
         self.cli = WebClient(token=self.token)
 
     @classmethod

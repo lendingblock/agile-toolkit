@@ -7,7 +7,6 @@ from jinja2 import Template
 
 from . import utils
 
-
 NAMESPACES = {"local", "development", "dev", "stage", "prod", "sandbox", "production"}
 
 
@@ -39,8 +38,8 @@ class Manager:
     def load_data(self, *paths: str, filename: str = None) -> Dict:
         filename = filename or self.filename(*paths)
         if not os.path.isfile(filename):
-            raise utils.CommandError('%s file missing' % filename)
-        with open(filename, 'r') as fp:
+            raise utils.CommandError("%s file missing" % filename)
+        with open(filename, "r") as fp:
             data = yaml.load(fp, Loader=yaml.FullLoader) or {}
         data_namespace = data.pop(self.namespace, None)
         for namespace in NAMESPACES:

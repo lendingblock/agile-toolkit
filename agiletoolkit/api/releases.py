@@ -28,7 +28,7 @@ class Releases(RepoComponents):
         """Get the latest release of this repo
         """
         url = "%s/latest" % self
-        response = self.http.get(url, auth=self.auth)
+        response = self.http.get(url, headers=self.default_headers())
         if response.status_code == 200:
             return response.json()
         elif response.status_code != 404:
@@ -38,7 +38,7 @@ class Releases(RepoComponents):
         """Get a release by tag
         """
         url = "%s/tags/%s" % (self, tag)
-        response = self.http.get(url, auth=self.auth)
+        response = self.http.get(url, headers=self.default_headers())
         response.raise_for_status()
         return response.json()
 
@@ -77,12 +77,10 @@ class Releases(RepoComponents):
         )
         info = os.stat(filename)
         size = info[stat.ST_SIZE]
+        headers = (self.default_headers(),)
+        headers.update({"content-type": content_type, "content-length": str(size)})
         response = self.http.post(
-            url,
-            data=stream_upload(filename),
-            auth=self.auth,
-            params=inputs,
-            headers={"content-type": content_type, "content-length": str(size)},
+            url, data=stream_upload(filename), params=inputs, headers=headers,
         )
         response.raise_for_status()
         return response.json()

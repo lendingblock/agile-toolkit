@@ -1,7 +1,7 @@
 import click
 
-from ..repo import RepoManager
 from ..utils import niceJson
+from .utils import repo_manager
 
 
 @click.command()
@@ -13,7 +13,7 @@ from ..utils import niceJson
 def release(ctx, yes, latest):
     """Create a new release in github
     """
-    m = RepoManager(ctx.obj["agile"])
+    m = repo_manager(ctx)
     api = m.github_repo()
     if latest:
         latest = api.releases.latest()

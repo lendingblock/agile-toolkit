@@ -1,6 +1,7 @@
 import os
 import re
 from dataclasses import dataclass
+from functools import cached_property
 from urllib.parse import urlparse
 
 from . import utils
@@ -19,6 +20,10 @@ class RepoManager(Manager):
     def init(self):
         self.info = utils.gitrepo(self.path)
         SlackIntegration.add(self)
+
+    @cached_property
+    def github(self):
+        return GithubApi()
 
     def software_version(self):
         """Software version
@@ -90,9 +95,6 @@ class RepoManager(Manager):
 
         return True
 
-    def github(self):
-        return GithubApi()
-
     def branches(self):
         return self.get("branches", Branches)
 
@@ -110,4 +112,4 @@ class RepoManager(Manager):
             path = urlparse(url).path[1:]
         bits = path.split(".")
         bits.pop()
-        return self.github().repo(".".join(bits))
+        return self.github.repo(".".join(bits))
