@@ -9,7 +9,6 @@ coverage.xml
 venv
 build
 dist
-agile.py
 
 # mac
 .DS_Store
