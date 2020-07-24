@@ -42,5 +42,4 @@ release-pypi:	## release to pypi and github tag
 	@twine upload dist/* --username lsbardel --password $(PYPI_PASSWORD)
 
 validate:	## validate version
-	@ls -la
 	@python agile.py git validate
