@@ -30,7 +30,7 @@ test-lint:	## run linters check
 	./dev/run-black.sh --check
 
 version:	## Display version
-	@python3 -c "import agiletoolkit; print(agiletoolkit.__version__)"
+	@python -c "import agiletoolkit; print(agiletoolkit.__version__)"
 
 codecov:
 	codecov -t $(CODECOV_TOKEN)
@@ -40,7 +40,6 @@ release-github:	## new tag in github
 
 release-pypi:	## release to pypi and github tag
 	@twine upload dist/* --username lsbardel --password $(PYPI_PASSWORD)
-
 
 validate:	## validate version
 	@python agile.py git validate
