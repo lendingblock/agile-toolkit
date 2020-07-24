@@ -20,8 +20,8 @@ def test_git_validate():
     runner = CliRunner()
     with gitrepo("deploy"):
         result = runner.invoke(start, ["git", "validate"])
-        assert result.exit_code == 0
         print(result.output)
+        assert result.exit_code == 0
         assert result.output.strip() == "1.2.3"
 
 
