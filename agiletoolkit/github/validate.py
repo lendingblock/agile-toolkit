@@ -1,6 +1,6 @@
 import click
 
-from ..repo import RepoManager
+from .utils import repo_manager
 
 
 @click.command()
@@ -14,6 +14,6 @@ from ..repo import RepoManager
 def validate(ctx, sandbox):
     """Check if version of repository is semantic
     """
-    m = RepoManager(ctx.obj["agile"])
+    m = repo_manager(ctx)
     if not sandbox or m.can_release("sandbox"):
         click.echo(m.validate_version())

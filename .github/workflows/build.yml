@@ -34,6 +34,8 @@ jobs:
       run: make test-lint
     - name: git info
       run: python agile.py git info
+    - name: git remote
+      run: python agile.py git remote
     - name: run tests
       run: make test
     - name: upload coverage
