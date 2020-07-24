@@ -1,0 +1,33 @@
+name: release
+
+on:
+  push:
+    branches:
+      - deploy
+    tags-ignore:
+      - v*
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      PYTHON_ENV: ci
+      PYPI_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+      GITHUB_TOKEN: ${{ secrets.QMBOT_GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: lint
+        run: make test-lint
+      - name: run tests
+        run: make test
+      - name: build python 3.8 bundle
+        run: make bundle
+      - name: release to pypi
+        run: make release-pypi
+      - name: release to github
+        run: make release-github

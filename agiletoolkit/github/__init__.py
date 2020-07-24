@@ -1,11 +1,11 @@
 import click
 
-from .info import info
+from .info import auth, info
 from .labels import labels
 from .milestones import milestones
 from .release import release
-from .validate import validate
 from .remote import remote
+from .validate import validate
 
 
 @click.group(invoke_without_command=True)
@@ -18,6 +18,7 @@ def git(ctx):
 
 
 git.add_command(info)
+git.add_command(auth)
 git.add_command(labels)
 git.add_command(milestones)
 git.add_command(release)

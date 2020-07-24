@@ -7,13 +7,10 @@ from jinja2 import Template
 
 from . import utils
 
-NAMESPACES = {
-    'local', 'development', 'dev', 'stage', 'prod', 'sandbox', 'production'
-}
+NAMESPACES = {"local", "development", "dev", "stage", "prod", "sandbox", "production"}
 
 
 class Manager:
-
     def __init__(self, config=None, path=None, yes=False, namespace=None):
         self.config = config or {}
         self.path = path or os.getcwd()
@@ -41,22 +38,22 @@ class Manager:
     def load_data(self, *paths: str, filename: str = None) -> Dict:
         filename = filename or self.filename(*paths)
         if not os.path.isfile(filename):
-            raise utils.CommandError('%s file missing' % filename)
-        with open(filename, 'r') as fp:
+            raise utils.CommandError("%s file missing" % filename)
+        with open(filename, "r") as fp:
             data = yaml.load(fp, Loader=yaml.FullLoader) or {}
         data_namespace = data.pop(self.namespace, None)
         for namespace in NAMESPACES:
             data.pop(namespace, None)
         if data_namespace:
             data.update(data_namespace)
-        data['namespace'] = self.namespace
+        data["namespace"] = self.namespace
         return data
 
     def manifest(self, values, *paths, filename: str = None) -> Dict:
         """Load a manifest file and apply template values
         """
         filename = filename or self.filename(*paths)
-        with open(filename, 'r') as fp:
+        with open(filename, "r") as fp:
             template = Template(fp.read())
         return yaml.load(template.render(values), Loader=yaml.FullLoader)
 

@@ -7,16 +7,36 @@ help:
 
 # ===================================================================================================
 
+bundle:		## build python bundle
+	@python setup.py sdist bdist_wheel
+
 clean:		## Remove python cache files
 	find . -name '__pycache__' | xargs rm -rf
 	find . -name '*.pyc' -delete
 
-test:		## Run flake8 and unit tests
+install:	## Install packages in virtualenv
+	@./dev/install.sh
+
+lint:		## run linters
+	isort .
+	./dev/run-black.sh
+
+test:		## Run unit tests
+	@pytest --cov --cov-report xml --cov-report html
+
+test-lint:	## run linters check
 	flake8
-	pytest --cov
+	isort . --check
+	./dev/run-black.sh --check
 
 version:	## Display version
 	@python3 -c "import agiletoolkit; print(agiletoolkit.__version__)"
 
 codecov:
-	codecov --token $(CODECOV_TOKEN)
+	codecov -t $(CODECOV_TOKEN)
+
+release-github:	## new tag in github
+	@python agile.py git release --yes
+
+release-pypi:		## release to pypi and github tag
+	@twine upload dist/* --username lsbardel --password $(PYPI_PASSWORD)

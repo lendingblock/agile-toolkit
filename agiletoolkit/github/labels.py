@@ -9,17 +9,13 @@ from ..utils import CommandError
 def labels(ctx):
     """Crate or update labels in github
     """
-    config = ctx.obj['agile']
-    repos = config.get('repositories')
-    labels = config.get('labels')
+    config = ctx.obj["agile"]
+    repos = config.get("repositories")
+    labels = config.get("labels")
     if not isinstance(repos, list):
-        raise CommandError(
-            'You need to specify the "repos" list in the config'
-        )
+        raise CommandError('You need to specify the "repos" list in the config')
     if not isinstance(labels, dict):
-        raise CommandError(
-            'You need to specify the "labels" dictionary in the config'
-        )
+        raise CommandError('You need to specify the "labels" dictionary in the config')
     git = GithubApi()
     for repo in repos:
         repo = git.repo(repo)
