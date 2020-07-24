@@ -38,5 +38,9 @@ codecov:
 release-github:	## new tag in github
 	@python agile.py git release --yes
 
-release-pypi:		## release to pypi and github tag
+release-pypi:	## release to pypi and github tag
 	@twine upload dist/* --username lsbardel --password $(PYPI_PASSWORD)
+
+
+validate:	## validate version
+	@python agile.py git validate
