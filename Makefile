@@ -7,6 +7,9 @@ help:
 
 # ===================================================================================================
 
+bundle:		## build python bundle
+	@python setup.py sdist bdist_wheel
+
 clean:		## Remove python cache files
 	find . -name '__pycache__' | xargs rm -rf
 	find . -name '*.pyc' -delete
@@ -31,3 +34,9 @@ version:	## Display version
 
 codecov:
 	codecov -t $(CODECOV_TOKEN)
+
+release-github:	## new tag in github
+	@python agile.py git release --yes
+
+release-pypi:		## release to pypi and github tag
+	@twine upload dist/* --username lsbardel --password $(PYPI_PASSWORD)
