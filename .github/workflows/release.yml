@@ -31,7 +31,7 @@ jobs:
       - name: run tests
         run: make test
       - name: build python bundle
-        run: make bundle
+        run: "make bundle${{ matrix.python-version }}"
       - name: release to pypi
         run: make release-pypi
       - name: release to github

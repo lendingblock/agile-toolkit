@@ -30,8 +30,6 @@ jobs:
     - name: install dataclasses
       if: matrix.python-version == '3.6'
       run: pip install dataclasses
-    - name: make validate
-      run: make validate
     - name: run lint
       run: make test-lint
     - name: git info
