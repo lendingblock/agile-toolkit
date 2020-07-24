@@ -21,6 +21,7 @@ def test_git_validate():
     with gitrepo("deploy"):
         result = runner.invoke(start, ["git", "validate"])
         assert result.exit_code == 0
+        print(result.output)
         assert result.output.strip() == "1.2.3"
 
 

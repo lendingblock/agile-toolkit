@@ -40,7 +40,7 @@ source:
 
 
 @contextmanager
-def gitrepo(branch, pr=False, tag=None, head_id=None):
+def gitrepo(branch: str, pr=False, tag=None, head_id=None):
     """
     prepare artifical git repo
     1. create temp dir
@@ -65,8 +65,6 @@ def gitrepo(branch, pr=False, tag=None, head_id=None):
         os.makedirs("deploy")
         with open("Makefile", "w") as f:
             f.write(MAKEFILE.replace("<tab>", "\t"))
-        with open("deploy/codebuild.yaml", "w") as f:
-            f.write(CODEBUILD)
         with mock.patch("agiletoolkit.utils.gitrepo", side_effect=mocker) as m:
             try:
                 yield m
