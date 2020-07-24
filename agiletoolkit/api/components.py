@@ -1,3 +1,5 @@
+from typing import Dict
+
 from ..utils import CommandError
 
 
@@ -30,6 +32,9 @@ class Component:
             return cls.id_from_data(data)
         return data
 
+    def default_headers(self) -> Dict[str, str]:
+        return self.client.default_headers()
+
 
 class RepoComponents(Component):
     @property
@@ -41,14 +46,14 @@ class RepoComponents(Component):
         """
         id = self.as_id(id)
         url = "%s/%s" % (self, id)
-        response = self.http.get(url, auth=self.auth)
+        response = self.http.get(url, headers=self.default_headers())
         response.raise_for_status()
         return response.json()
 
     def create(self, data):
         """Create a new component
         """
-        response = self.http.post(str(self), json=data, auth=self.auth)
+        response = self.http.post(str(self), json=data, headers=self.default_headers())
         response.raise_for_status()
         return response.json()
 
@@ -56,7 +61,9 @@ class RepoComponents(Component):
         """Update a component
         """
         id = self.as_id(id)
-        response = self.http.patch("%s/%s" % (self, id), json=data, auth=self.auth)
+        response = self.http.patch(
+            "%s/%s" % (self, id), json=data, headers=self.default_headers()
+        )
         response.raise_for_status()
         return response.json()
 
@@ -64,7 +71,9 @@ class RepoComponents(Component):
         """Delete a component by id
         """
         id = self.as_id(id)
-        response = self.http.delete("%s/%s" % (self.api_url, id), auth=self.auth)
+        response = self.http.delete(
+            "%s/%s" % (self.api_url, id), headers=self.default_headers()
+        )
         response.raise_for_status()
 
     def get_list(self, url=None, callback=None, limit=100, **data):
@@ -82,7 +91,7 @@ class RepoComponents(Component):
         if limit:
             data["per_page"] = min(limit, 100)
         while url:
-            response = self.http.get(url, params=data, auth=self.auth)
+            response = self.http.get(url, params=data, headers=self.default_headers())
             response.raise_for_status()
             result = response.json()
             n = m = len(result)

@@ -159,5 +159,5 @@ def gitrepo(root=None):
     }
 
 
-def version():
+def version() -> str:
     return sh("make version").strip().split()[-1]

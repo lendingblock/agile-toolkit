@@ -14,6 +14,7 @@ jobs:
     env:
       PYTHON_ENV: ci
       CODECOV_TOKEN: d39c47c0-afa6-49a3-8c22-5c3599ecc771
+      GITHUB_TOKEN: ${{ secrets.QMBOT_GITHUB_TOKEN }}
     strategy:
       matrix:
         python-version: [3.6, 3.7, 3.8]
@@ -26,8 +27,15 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: make install
+    - name: install dataclasses
+      if: matrix.python-version == '3.6'
+      run: pip install dataclasses
     - name: run lint
       run: make test-lint
+    - name: git info
+      run: python agile.py git info
+    - name: git remote
+      run: python agile.py git remote
     - name: run tests
       run: make test
     - name: upload coverage

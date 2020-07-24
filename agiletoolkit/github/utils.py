@@ -1,5 +1,11 @@
 import click
 
+from ..repo import RepoManager
+
+
+def repo_manager(ctx) -> RepoManager:
+    return RepoManager(ctx.obj["agile"])
+
 
 def get_repos(labels):
     if not labels:

@@ -27,7 +27,7 @@ GIT_OUTPUT = {
 
 MAKEFILE = """\
 version:
-<tab>@echo "1.2.3"
+\t@echo "1.2.3"
 """
 
 
@@ -40,9 +40,9 @@ source:
 
 
 @contextmanager
-def gitrepo(branch, pr=False, tag=None, head_id=None):
+def gitrepo(branch: str, pr=False, tag=None, head_id=None):
     """
-    prepare artifical git repo
+    prepare artificial git repo
     1. create temp dir
     2. add basic project structure
     3. cd to that dir
@@ -64,9 +64,7 @@ def gitrepo(branch, pr=False, tag=None, head_id=None):
         os.chdir(temp_dir)
         os.makedirs("deploy")
         with open("Makefile", "w") as f:
-            f.write(MAKEFILE.replace("<tab>", "\t"))
-        with open("deploy/codebuild.yaml", "w") as f:
-            f.write(CODEBUILD)
+            f.write(MAKEFILE)
         with mock.patch("agiletoolkit.utils.gitrepo", side_effect=mocker) as m:
             try:
                 yield m

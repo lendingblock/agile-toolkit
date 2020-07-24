@@ -1,23 +1,22 @@
-import configparser
 import logging
 import os
+from typing import Dict
 
 import requests
 
 from .components import GithubException
 from .repo import GitRepo
 
+__all__ = ["GithubApi", "GitRepo", "GithubException"]
+
+
 LOGGER = logging.getLogger("github")
 
 
 class GithubApi:
-    def __init__(self, auth=None, http=None):
+    def __init__(self, token: str = "") -> None:
         self.http = requests.Session()
-        try:
-            self.auth = auth or get_auth()
-        except GithubException as exc:
-            LOGGER.warning(str(exc))
-            self.auth = None
+        self.token = token or get_token()
 
     @property
     def api_url(self):
@@ -35,33 +34,13 @@ class GithubApi:
     def repo(self, repo_path):
         return GitRepo(self, repo_path)
 
-
-def get_auth():
-    """Return a tuple for authenticating a user
-
-    If not successful raise ``AgileError``.
-    """
-    auth = get_auth_from_env()
-    if auth[0] and auth[1]:
-        return auth
-
-    home = os.path.expanduser("~")
-    config = os.path.join(home, ".gitconfig")
-    if not os.path.isfile(config):
-        raise GithubException("No .gitconfig available")
-
-    parser = configparser.ConfigParser()
-    parser.read(config)
-    if "user" in parser:
-        user = parser["user"]
-        if "username" not in user:
-            raise GithubException("Specify username in %s user " "section" % config)
-        if "token" not in user:
-            raise GithubException("Specify token in %s user section" % config)
-        return user["username"], user["token"]
-    else:
-        raise GithubException("No user section in %s" % config)
+    def default_headers(self) -> Dict[str, str]:
+        headers = {}
+        if self.token:
+            headers["authorization"] = f"token {self.token}"
+        return headers
 
 
-def get_auth_from_env():
-    return (os.environ.get("GITHUB_USERNAME", ""), os.environ.get("GITHUB_TOKEN", ""))
+def get_token() -> str:
+    token = os.getenv("GITHUB_SECRET_TOKEN") or os.getenv("GITHUB_TOKEN")
+    return token

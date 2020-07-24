@@ -20,6 +20,10 @@ class RepoManager(Manager):
         self.info = utils.gitrepo(self.path)
         SlackIntegration.add(self)
 
+    @property
+    def github(self):
+        return GithubApi()
+
     def software_version(self):
         """Software version
 
@@ -90,9 +94,6 @@ class RepoManager(Manager):
 
         return True
 
-    def github(self):
-        return GithubApi()
-
     def branches(self):
         return self.get("branches", Branches)
 
@@ -108,6 +109,6 @@ class RepoManager(Manager):
             path = url[1]
         else:
             path = urlparse(url).path[1:]
-        bits = path.split(".")
-        bits.pop()
-        return self.github().repo(".".join(bits))
+        if path.endswith(".git"):
+            path = path[:-4]
+        return self.github.repo(path)
