@@ -42,7 +42,7 @@ source:
 @contextmanager
 def gitrepo(branch: str, pr=False, tag=None, head_id=None):
     """
-    prepare artifical git repo
+    prepare artificial git repo
     1. create temp dir
     2. add basic project structure
     3. cd to that dir
