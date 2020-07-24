@@ -31,7 +31,7 @@ jobs:
       if: matrix.python-version == '3.6'
       run: pip install dataclasses
     - name: make version
-      run: make version
+      run: python agile.py validate
     - name: run lint
       run: make test-lint
     - name: git info
