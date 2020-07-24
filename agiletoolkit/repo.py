@@ -1,7 +1,6 @@
 import os
 import re
 from dataclasses import dataclass
-from functools import cached_property
 from urllib.parse import urlparse
 
 from . import utils
@@ -21,7 +20,7 @@ class RepoManager(Manager):
         self.info = utils.gitrepo(self.path)
         SlackIntegration.add(self)
 
-    @cached_property
+    @property
     def github(self):
         return GithubApi()
 
