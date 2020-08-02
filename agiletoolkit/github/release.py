@@ -5,11 +5,11 @@ from .utils import repo_manager
 
 
 @click.command()
-@click.pass_context
 @click.option("--yes", is_flag=True, help="Commit changes to github", default=False)
 @click.option(
     "--latest", is_flag=True, help="Show latest release in github", default=False
 )
+@click.pass_context
 def release(ctx, yes, latest):
     """Create a new release in github
     """
@@ -19,6 +19,8 @@ def release(ctx, yes, latest):
         latest = api.releases.latest()
         if latest:
             click.echo(latest["tag_name"])
+        else:
+            click.echo("no releases")
     elif m.can_release("sandbox"):
         branch = m.info["branch"]
         version = m.validate_version()

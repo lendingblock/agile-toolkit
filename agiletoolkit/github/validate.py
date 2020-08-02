@@ -1,5 +1,6 @@
 import click
 
+from ..api import GithubException
 from .utils import repo_manager
 
 
@@ -10,10 +11,22 @@ from .utils import repo_manager
     help="Validate only on sandbox/deploy branch",
     default=False,
 )
+@click.option(
+    "--yes-no",
+    is_flag=True,
+    help="Return yes for version is good, no for version is not good",
+    default=False,
+)
 @click.pass_context
-def validate(ctx, sandbox):
+def validate(ctx, sandbox, yes_no):
     """Check if version of repository is semantic
     """
     m = repo_manager(ctx)
     if not sandbox or m.can_release("sandbox"):
-        click.echo(m.validate_version())
+        try:
+            version = m.validate_version()
+            click.echo("yes" if yes_no else version)
+        except GithubException:
+            if yes_no:
+                return click.echo("no")
+            raise

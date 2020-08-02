@@ -51,7 +51,7 @@ class RepoManager(Manager):
             branch = re.sub("[^a-z0-9_-]+", "-", branch)
             return f"{branch}-{self.info['head']['id'][:8]}"
 
-    def validate_version(self, prefix="v"):
+    def validate_version(self, prefix: str = "v", yes_no: bool = False):
         """Validate version by checking if it is a valid semantic version
         and its value is higher than latest github tag
         """
