@@ -1,3 +1,3 @@
-"""Agile toolkit for devops and repository management"""
+"""Agile toolkit for publishing and repository management"""
 
 __version__ = "0.5.8"
