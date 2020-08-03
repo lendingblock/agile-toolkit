@@ -82,10 +82,7 @@ jobs:
       PYTHON_ENV: ci
       PYPI_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
       GITHUB_TOKEN: ${{ secrets.QMBOT_GITHUB_TOKEN }}
-    needs:
-      - build (3.6)
-      - build (3.7)
-      - build (3.8)
+    needs: release
     if: github.ref == 'refs/heads/master'
 
     steps:
