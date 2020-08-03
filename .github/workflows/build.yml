@@ -64,16 +64,15 @@ jobs:
       - name: install dataclasses
         if: matrix.python-version == '3.6'
         run: pip install dataclasses
-      - name: test version
+      - name: check if we can publish
+        id: check
         run: echo ::set-output name=release::$(make test-version)
-      - name: test variable value
-        run: echo $(steps.vars.outputs.release)
       - name: build python bundle
-        if: steps.vars.outputs.release == 'yes'
+        if: steps.check.outputs.release == 'yes'
         run: "make bundle${{ matrix.python-version }}"
       - name: release to pypi
-        if: steps.vars.outputs.release == 'yes'
+        if: steps.check.outputs.release == 'yes'
         run: make release-pypi
       - name: release to github
-        if: steps.vars.outputs.release == 'yes' && matrix.python-version == '3.8'
+        if: steps.check.outputs.release == 'yes' && matrix.python-version == '3.8'
         run: make release-github
