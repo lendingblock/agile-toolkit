@@ -12,7 +12,7 @@ from .slack import SlackIntegration
 @dataclass
 class Branches:
     dev: str = "master"
-    sandbox: str = "deploy"
+    sandbox: str = "master"
 
 
 class RepoManager(Manager):

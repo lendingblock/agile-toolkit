@@ -50,7 +50,7 @@ def test_git_release_latest():
 def test_git_release_skipped():
     runner = CliRunner()
 
-    with gitrepo("master") as mock:
+    with gitrepo("dev") as mock:
         result = runner.invoke(start, ["git", "release"])
         assert result.exit_code == 0
         assert mock.called

@@ -31,12 +31,12 @@ def test_version():
 
 
 def test_repo(mocker):
-    with gitrepo("deploy"):
+    with gitrepo("master"):
         m = RepoManager()
         m.validate_version = mocker.Mock(return_value=True)
         assert m.can_release()
 
-    with gitrepo("deploy"):
+    with gitrepo("master"):
         m = RepoManager()
         m.validate_version = mocker.Mock(side_effect=GithubException("test"))
         assert m.can_release() is False
