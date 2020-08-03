@@ -40,6 +40,10 @@ jobs:
     - name: upload coverage
       if: matrix.python-version == '3.8'
       run: make codecov
+    - name: test version
+      run: echo ::set-output name=release::$(make test-version)
+    - name: test variable value
+      run: echo "${{ steps.vars.outputs.release }}"
 
   release:
     runs-on: ubuntu-latest
