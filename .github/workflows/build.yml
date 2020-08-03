@@ -84,10 +84,13 @@ jobs:
     if: github.ref == 'refs/heads/master'
 
     steps:
+      - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
+      - name: Install dependencies
+        run: make install
       - name: check if we can publish
         id: check
         run: echo ::set-output name=release::$(make test-version)
