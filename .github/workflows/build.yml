@@ -67,6 +67,8 @@ jobs:
       - name: check if we can publish
         id: check
         run: echo ::set-output name=release::$(make test-version)
+      - name: echo the var
+        run: echo ${{ steps.check.outputs.release }}
       - name: build python bundle
         if: steps.check.outputs.release == 'yes'
         run: "make bundle${{ matrix.python-version }}"
