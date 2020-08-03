@@ -73,6 +73,24 @@ jobs:
       - name: release to pypi
         if: steps.check.outputs.release == 'yes'
         run: make release-pypi
+
+  github:
+    runs-on: ubuntu-latest
+    env:
+      PYTHON_ENV: ci
+      PYPI_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+      GITHUB_TOKEN: ${{ secrets.QMBOT_GITHUB_TOKEN }}
+    needs: build
+    if: github.ref == 'refs/heads/master'
+
+    steps:
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: check if we can publish
+        id: check
+        run: echo ::set-output name=release::$(make test-version)
       - name: release to github
-        if: steps.check.outputs.release == 'yes' && matrix.python-version == '3.8'
+        if: steps.check.outputs.release == 'yes'
         run: make release-github
