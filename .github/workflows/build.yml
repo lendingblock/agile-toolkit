@@ -41,9 +41,10 @@ jobs:
       if: matrix.python-version == '3.8'
       run: make codecov
     - name: test version
-      run: echo "::set-output name=PUBLISH::$(make test-version)"
+      id: publish
+      run: echo ::set-output name=publish::$(make test-version)
     - name: test variable value
-      run: echo ${PUBLISH}
+      run: echo ${{steps.publish.outputs.publish}}
 
   release:
     runs-on: ubuntu-latest
