@@ -67,7 +67,7 @@ jobs:
       - name: test version
         run: echo ::set-output name=release::$(make test-version)
       - name: test variable value
-        run: echo ${{ steps.vars.outputs.release }}
+        run: echo $(steps.vars.outputs.release)
       - name: build python bundle
         if: steps.vars.outputs.release == 'yes'
         run: "make bundle${{ matrix.python-version }}"
